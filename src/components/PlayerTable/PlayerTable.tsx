@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 export type PlayerRow = {
   id: string | number;
-  name: string;           // "Anderson Santamaría"
-  position: string;       // "DF", "MC", "DL", etc.
-  avatarUrl?: string;     // opcional (se deja espacio si no hay)
-  pitchImgUrl?: string;   // opcional (mini cancha; se deja espacio)
+  name: string;
+  position: string;
+  avatarUrl?: string;
+  pitchImgUrl?: string;
   matches: number;
   minutes: number;
   goals: number;
@@ -31,8 +31,8 @@ export default function PlayerTable({ rows, onRowClick }: Props) {
   const sorted = useMemo(() => {
     const clone = [...rows];
     clone.sort((a, b) => {
-      const va = (a[sortKey] as any);
-      const vb = (b[sortKey] as any);
+      const va = a[sortKey] as any;
+      const vb = b[sortKey] as any;
       if (typeof va === "string") return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
       return sortAsc ? va - vb : vb - va;
     });
@@ -84,24 +84,29 @@ export default function PlayerTable({ rows, onRowClick }: Props) {
           </div>
           <div className="pt__cell pt__cell--card" role="columnheader" title="Amarillas">
             <span className="pt__card pt__card--y" aria-hidden />
-            <SortIcon small active={sortKey === "yellow"} asc={sortAsc}
-              onClick={() => handleSort("yellow")} asButton />
+            <SortIcon
+              small
+              active={sortKey === "yellow"}
+              asc={sortAsc}
+              onClick={() => handleSort("yellow")}
+              asButton
+            />
           </div>
           <div className="pt__cell pt__cell--card" role="columnheader" title="Rojas">
             <span className="pt__card pt__card--r" aria-hidden />
-            <SortIcon small active={sortKey === "red"} asc={sortAsc}
-              onClick={() => handleSort("red")} asButton />
+            <SortIcon
+              small
+              active={sortKey === "red"}
+              asc={sortAsc}
+              onClick={() => handleSort("red")}
+              asButton
+            />
           </div>
         </div>
 
         {/* Rows */}
         {sorted.map((r) => (
-          <div
-            key={r.id}
-            className="pt__row"
-            role="row"
-            onClick={() => onRowClick?.(r)}
-          >
+          <div key={r.id} className="pt__row" role="row" onClick={() => onRowClick?.(r)}>
             <div className="pt__cell pt__cell--player" role="cell">
               <div className="pt__avatarWrap">
                 {r.avatarUrl ? (
@@ -118,18 +123,34 @@ export default function PlayerTable({ rows, onRowClick }: Props) {
 
             <div className="pt__cell pt__cell--pos" role="cell">
               {r.pitchImgUrl ? (
-                <img className="pt__pitch" src={r.pitchImgUrl} alt={`Mapa posición ${r.position}`} />
+                <img
+                  className="pt__pitch"
+                  src={r.pitchImgUrl}
+                  alt={`Mapa posición ${r.position}`}
+                />
               ) : (
                 <span className="pt__pitch pt__pitch--placeholder" aria-hidden />
               )}
             </div>
 
-            <div className="pt__cell" role="cell">{r.matches}</div>
-            <div className="pt__cell" role="cell">{r.minutes}</div>
-            <div className="pt__cell" role="cell">{r.goals}</div>
-            <div className="pt__cell" role="cell">{r.assists}</div>
-            <div className="pt__cell pt__cell--cardVal" role="cell">{r.yellow}</div>
-            <div className="pt__cell pt__cell--cardVal" role="cell">{r.red}</div>
+            <div className="pt__cell" role="cell">
+              {r.matches}
+            </div>
+            <div className="pt__cell" role="cell">
+              {r.minutes}
+            </div>
+            <div className="pt__cell" role="cell">
+              {r.goals}
+            </div>
+            <div className="pt__cell" role="cell">
+              {r.assists}
+            </div>
+            <div className="pt__cell pt__cell--cardVal" role="cell">
+              {r.yellow}
+            </div>
+            <div className="pt__cell pt__cell--cardVal" role="cell">
+              {r.red}
+            </div>
           </div>
         ))}
       </div>
@@ -143,7 +164,7 @@ function SortIcon({
   asc,
   small,
   onClick,
-  asButton
+  asButton,
 }: {
   active?: boolean;
   asc?: boolean;
@@ -155,11 +176,11 @@ function SortIcon({
     "pt__sortIcon",
     active ? "is-active" : "",
     asc ? "is-asc" : "is-desc",
-    small ? "is-sm" : ""
+    small ? "is-sm" : "",
   ].join(" ");
   const content = (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M7 10l5-6 5 6H7zm0 4l5 6 5-6H7z" fill="currentColor"/>
+      <path d="M7 10l5-6 5 6H7zm0 4l5 6 5-6H7z" fill="currentColor" />
     </svg>
   );
   if (asButton) {
