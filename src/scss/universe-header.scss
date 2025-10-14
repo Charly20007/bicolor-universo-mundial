@@ -1,0 +1,128 @@
+// ===== Variables =====
+$max: 980px;
+$red: #d24343;          // rojo botón
+$red-800: #b73131;
+$neutral: #dedede;      // gris botón
+$neutral-700: #bdbdbd;
+$text: #6b6b6b;         // gris texto lead
+$shadow: 0 8px 14px rgba(0,0,0,.12);
+$radius: 14px;
+
+.uheader {
+  max-width: $max;
+  margin: 0 auto;
+  padding: 0 16px 28px;
+  text-align: center;
+
+  // ===== Hero =====
+  &__hero {
+    height: 210px;
+    border-radius: 12px;
+    background: #b30000 center / cover no-repeat;
+    display: grid;
+    place-items: end center;       // logo centrado hacia abajo (como en el mock)
+    overflow: hidden;
+  }
+
+  &__logo {
+    width: clamp(220px, 48vw, 380px);
+    transform: translateY(30%);    // sobresale del banner
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,.45));
+  }
+
+  // ===== Lead =====
+  &__lead {
+    margin: 44px auto 18px;
+    max-width: 760px;
+    color: $text;
+    font-size: clamp(16px, 1.6vw, 20px);
+    line-height: 1.4;
+  }
+
+  // ===== CTA Buttons =====
+  &__cta {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    --padY: 14px;
+    --padX: 22px;
+    appearance: none;
+    border: 0;
+    border-radius: $radius;
+    padding: var(--padY) var(--padX);
+    font-weight: 800;
+    letter-spacing: .3px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,.2), $shadow;
+    transition: transform .08s ease, filter .12s ease;
+
+    &:active { transform: translateY(1px); }
+    &:focus-visible { outline: 3px solid rgba(0,0,0,.3); outline-offset: 2px; }
+
+    &--primary {
+      background: $red;
+      color: #fff;
+      text-shadow: 0 1px 0 rgba(0,0,0,.22);
+      &:hover { filter: brightness(.96); background: $red-800; }
+    }
+
+    &--neutral {
+      background: $neutral;
+      color: #444;
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,.6), // brillo superior
+        inset 0 -2px 0 rgba(0,0,0,.08),     // borde inferior
+        $shadow;
+      &:hover { background: $neutral-700; }
+    }
+  }
+
+  // ===== Search =====
+  &__search {
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto;
+
+    input {
+      width: 100%;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid #dcdcdc;
+      padding: 0 44px 0 14px;
+      font-size: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.06) inset, $shadow;
+      color: #333;
+
+      &::placeholder { color: #9e9e9e; }
+      &:focus { outline: 3px solid rgba(210,67,67,.2); }
+    }
+
+    button {
+      position: absolute;
+      right: 8px; top: 50%;
+      transform: translateY(-50%);
+      width: 32px; height: 32px;
+      border: 0; border-radius: 8px;
+      background: transparent; color: #9e9e9e;
+      display: grid; place-items: center; cursor: pointer;
+
+      svg { width: 22px; height: 22px; }
+      &:hover { color: #6d6d6d; }
+      &:focus-visible { outline: 2px solid rgba(0,0,0,.25); outline-offset: 2px; }
+    }
+  }
+
+  // ===== Responsive =====
+  @media (max-width: 640px) {
+    padding: 0 12px 22px;
+
+    &__hero { height: 180px; }
+    &__logo { transform: translateY(26%); }
+    .btn { --padY: 12px; --padX: 18px; }
+  }
+}
