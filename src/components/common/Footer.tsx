@@ -15,11 +15,11 @@ const defaultCredits: Credit[] = [
   { label: "Programación",  name: "David Condori" },
 ];
 
-export default function FooterCredits({
+const FooterCredits = ({
   logoUrl,
   logoAlt = "Logo del proyecto",
   credits = defaultCredits,
-}: Props) {
+}: Props) => {
   return (
     <footer className="fc" aria-labelledby="footer-credits-title">
       <h2 id="footer-credits-title" className="fc__sr">Créditos</h2>
@@ -43,3 +43,5 @@ export default function FooterCredits({
     </footer>
   );
 }
+
+export default FooterCredits

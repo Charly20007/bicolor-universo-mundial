@@ -1,158 +1,207 @@
 import { useMemo, useState } from "react";
-
-export type PlayerRow = {
-  id: string | number;
-  name: string;
-  position: string;
-  avatarUrl?: string;
-  pitchImgUrl?: string;
-  matches: number;
-  minutes: number;
-  goals: number;
-  assists: number;
-  yellow: number;
-  red: number;
-};
+import { PlayerRow } from "../../types/types";
 
 type SortKey = keyof Pick<
   PlayerRow,
-  "name" | "position" | "matches" | "minutes" | "goals" | "assists" | "yellow" | "red"
+  "name" | "matches" | "minutes" | "goals" | "assists" | "yellow" | "red"
 >;
 
 type Props = {
   rows: PlayerRow[];
   onRowClick?: (row: PlayerRow) => void;
+  highlightQuery?: string;
+  emptyStateText?: string;
 };
 
-export default function PlayerTable({ rows, onRowClick }: Props) {
+// normaliza string (quita acentos y pasa a minúsculas)
+function norm(s: string) {
+  return s
+    .normalize("NFD")
+    // @ts-ignore – clase Unicode para diacríticos
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase();
+}
+
+/** Resalta el texto que coincide con la búsqueda */
+function highlightText(name: string, q?: string) {
+  if (!q) return name;
+  const cleanName = norm(name);
+  const cleanQ = norm(q.trim());
+  if (!cleanQ) return name;
+
+  const idx = cleanName.indexOf(cleanQ);
+  if (idx === -1) return name;
+
+  let realStart = 0;
+  let cleanCount = 0;
+  for (let i = 0; i < name.length; i++) {
+    const step = norm(name[i]).length;
+    if (cleanCount === idx) {
+      realStart = i;
+      break;
+    }
+    cleanCount += step;
+  }
+
+  let realLen = 0;
+  let added = 0;
+  for (let i = realStart; i < name.length && added < cleanQ.length; i++) {
+    realLen++;
+    added += norm(name[i]).length;
+  }
+
+  const before = name.slice(0, realStart);
+  const match = name.slice(realStart, realStart + realLen);
+  const after = name.slice(realStart + realLen);
+
+  return (
+    <>
+      {before}
+      <mark>{match}</mark>
+      {after}
+    </>
+  );
+}
+
+export default function PlayerTable({
+  rows,
+  onRowClick,
+  highlightQuery,
+  emptyStateText = "No hay datos para mostrar.",
+}: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
-  const [sortAsc, setSortAsc] = useState<boolean>(true);
+  const [sortAsc, setSortAsc] = useState(true);
 
   const sorted = useMemo(() => {
     const clone = [...rows];
     clone.sort((a, b) => {
       const va = a[sortKey] as any;
       const vb = b[sortKey] as any;
-      if (typeof va === "string") return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      if (typeof va === "string") {
+        return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      }
       return sortAsc ? va - vb : vb - va;
     });
     return clone;
   }, [rows, sortKey, sortAsc]);
 
   const handleSort = (key: SortKey) => {
-    if (key === sortKey) setSortAsc((v) => !v);
+    if (key === sortKey) setSortAsc(v => !v);
     else {
       setSortKey(key);
       setSortAsc(true);
     }
   };
 
+  if (!sorted.length) return <p style={{ padding: 16 }}>{emptyStateText}</p>;
+
   return (
     <div className="pt">
       <div className="pt__table" role="table" aria-label="Tabla de futbolistas">
-        {/* Header */}
+        {/* HEADER */}
         <div className="pt__row pt__row--head" role="row">
           <div className="pt__cell pt__cell--player" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("name")}>
-              Jugador <SortIcon active={sortKey === "name"} asc={sortAsc} />
+              <span>Jugador</span>
+              <SortIcon active={sortKey === "name"} asc={sortAsc} />
             </button>
           </div>
-          <div className="pt__cell pt__cell--pos" role="columnheader">
-            <button type="button" className="pt__sort" onClick={() => handleSort("position")}>
-              Posición <SortIcon active={sortKey === "position"} asc={sortAsc} />
+
+          <div className="pt__cell pt__cell--pos" role="columnheader" aria-label="Posición">
+            <button type="button" className="pt__sort pt__sort--pos" onClick={() => handleSort("minutes")}>
+              <span>Posición</span>
+              {/* usamos minutes solo para que tenga icono; si tienes un campo real de posición, cámbialo */}
+              <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
             </button>
           </div>
+
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("matches")}>
-              Partidos <SortIcon active={sortKey === "matches"} asc={sortAsc} />
+              <span>Partidos</span>
+              <SortIcon active={sortKey === "matches"} asc={sortAsc} />
             </button>
           </div>
+
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("minutes")}>
-              Minutos <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
+              <span>Minutos</span>
+              <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
             </button>
           </div>
+
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("goals")}>
-              Goles <SortIcon active={sortKey === "goals"} asc={sortAsc} />
+              <span>Goles</span>
+              <SortIcon active={sortKey === "goals"} asc={sortAsc} />
             </button>
           </div>
+
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("assists")}>
-              Asistencias <SortIcon active={sortKey === "assists"} asc={sortAsc} />
+              <span>Asistencias</span>
+              <SortIcon active={sortKey === "assists"} asc={sortAsc} />
             </button>
           </div>
+
           <div className="pt__cell pt__cell--card" role="columnheader" title="Amarillas">
             <span className="pt__card pt__card--y" aria-hidden />
-            <SortIcon
-              small
-              active={sortKey === "yellow"}
-              asc={sortAsc}
-              onClick={() => handleSort("yellow")}
-              asButton
-            />
+            <button type="button" className="pt__sort pt__sort--card" onClick={() => handleSort("yellow")} aria-label="Ordenar amarillas">
+              <SortIcon small active={sortKey === "yellow"} asc={sortAsc} />
+            </button>
           </div>
+
           <div className="pt__cell pt__cell--card" role="columnheader" title="Rojas">
             <span className="pt__card pt__card--r" aria-hidden />
-            <SortIcon
-              small
-              active={sortKey === "red"}
-              asc={sortAsc}
-              onClick={() => handleSort("red")}
-              asButton
-            />
+            <button type="button" className="pt__sort pt__sort--card" onClick={() => handleSort("red")} aria-label="Ordenar rojas">
+              <SortIcon small active={sortKey === "red"} asc={sortAsc} />
+            </button>
           </div>
         </div>
 
-        {/* Rows */}
-        {sorted.map((r) => (
-          <div key={r.id} className="pt__row" role="row" onClick={() => onRowClick?.(r)}>
-            <div className="pt__cell pt__cell--player" role="cell">
-              <div className="pt__avatarWrap">
-                {r.avatarUrl ? (
-                  <img className="pt__avatar" src={r.avatarUrl} alt={r.name} />
+        {/* ROWS */}
+        {sorted.map((r) => {
+          const [first, ...rest] = r.name.split(" ");
+          const firstHighlighted = highlightText(first, highlightQuery);
+          const restHighlighted = highlightText(rest.join(" "), highlightQuery);
+
+          return (
+            <div
+              key={r.id}
+              className="pt__row"
+              role="row"
+              onClick={() => onRowClick?.(r)}
+            >
+              <div className="pt__cell pt__cell--player" role="cell">
+                <div className="pt__avatarWrap">
+                  {r.avatarUrl ? (
+                    <img className="pt__avatar" src={r.avatarUrl} alt={r.name} />
+                  ) : (
+                    <span className="pt__avatar pt__avatar--placeholder" aria-hidden />
+                  )}
+                </div>
+                <div className="pt__name">
+                  <span className="pt__nameTop">{firstHighlighted}</span>
+                  <span className="pt__nameBottom">{restHighlighted}</span>
+                </div>
+              </div>
+
+              <div className="pt__cell pt__cell--pos" role="cell">
+                {r.pitchImgUrl ? (
+                  <img className="pt__pitch" src={r.pitchImgUrl} alt={`Posición de ${r.name}`} />
                 ) : (
-                  <span className="pt__avatar pt__avatar--placeholder" aria-hidden />
+                  <span className="pt__pitch pt__pitch--placeholder" />
                 )}
               </div>
-              <div className="pt__name">
-                <span className="pt__nameTop">{r.name.split(" ")[0]}</span>
-                <span className="pt__nameBottom">{r.name.split(" ").slice(1).join(" ")}</span>
-              </div>
-            </div>
 
-            <div className="pt__cell pt__cell--pos" role="cell">
-              {r.pitchImgUrl ? (
-                <img
-                  className="pt__pitch"
-                  src={r.pitchImgUrl}
-                  alt={`Mapa posición ${r.position}`}
-                />
-              ) : (
-                <span className="pt__pitch pt__pitch--placeholder" aria-hidden />
-              )}
+              <div className="pt__cell" role="cell">{r.matches}</div>
+              <div className="pt__cell" role="cell">{r.minutes}</div>
+              <div className="pt__cell" role="cell">{r.goals}</div>
+              <div className="pt__cell" role="cell">{r.assists}</div>
+              <div className="pt__cell pt__cell--cardVal" role="cell">{r.yellow}</div>
+              <div className="pt__cell pt__cell--cardVal" role="cell">{r.red}</div>
             </div>
-
-            <div className="pt__cell" role="cell">
-              {r.matches}
-            </div>
-            <div className="pt__cell" role="cell">
-              {r.minutes}
-            </div>
-            <div className="pt__cell" role="cell">
-              {r.goals}
-            </div>
-            <div className="pt__cell" role="cell">
-              {r.assists}
-            </div>
-            <div className="pt__cell pt__cell--cardVal" role="cell">
-              {r.yellow}
-            </div>
-            <div className="pt__cell pt__cell--cardVal" role="cell">
-              {r.red}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -163,14 +212,10 @@ function SortIcon({
   active,
   asc,
   small,
-  onClick,
-  asButton,
 }: {
   active?: boolean;
   asc?: boolean;
   small?: boolean;
-  onClick?: () => void;
-  asButton?: boolean;
 }) {
   const cls = [
     "pt__sortIcon",
@@ -178,17 +223,11 @@ function SortIcon({
     asc ? "is-asc" : "is-desc",
     small ? "is-sm" : "",
   ].join(" ");
-  const content = (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M7 10l5-6 5 6H7zm0 4l5 6 5-6H7z" fill="currentColor" />
-    </svg>
+  return (
+    <span className={cls} aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 10l5-6 5 6H7zm0 4l5 6 5-6H7z" fill="currentColor" />
+      </svg>
+    </span>
   );
-  if (asButton) {
-    return (
-      <button type="button" className={cls} onClick={onClick} aria-label="Ordenar">
-        {content}
-      </button>
-    );
-  }
-  return <span className={cls}>{content}</span>;
 }

@@ -7,9 +7,9 @@ import { Row } from '../types/types';
 const buildUrl = () => {
   const base = `https://docs.google.com/spreadsheets/d/${googleSheetKey}/gviz/tq`;
   const params = new URLSearchParams({
-    tq: query,          // 'select *'
+    tq: query,   
     tqx: 'out:json',
-    gid: sheetGid,      // '0'
+    gid: sheetGid,  
   });
   return `${base}?${params.toString()}`;
 };
@@ -25,14 +25,13 @@ const getScores = async (): Promise<Row[]> => {
   const rows = json.table.rows || [];
 
   return rows.map((r: any) => ({
-    jugadorImagen: r.c[0]?.v || '',
-    jugador: r.c[1]?.v || '',
-    posicionImagen: r.c[2]?.v || '',
-    posicion: r.c[3]?.v || '',
-    partidos: Number(r.c[4]?.v || 0),
-    minutos: Number(r.c[5]?.v || 0),
-    goles: Number(r.c[6]?.v || 0),
-    asistencias: Number(r.c[7]?.v || 0),
+    jugadorImagen: r.c[1]?.v || '',     // B
+    jugador: r.c[2]?.v || '',           // C
+    posicionImagen: r.c[3]?.v || '',    // D
+    partidos: r.c[4]?.v || '',
+    minutos: Number(r.c[5]?.v || 0),    // SUM(E)
+    goles: Number(r.c[6]?.v || 0),      // SUM(F)
+    asistencias: Number(r.c[7]?.v || 0),// SUM(G)
     tarjetasAmarillas: Number(r.c[8]?.v || 0),
     tarjetasRojas: Number(r.c[9]?.v || 0),
   }));

@@ -3,4 +3,4 @@ export const googleSheetKey =
 export const keyData = 'scoresData';
 export const query = 'select *';
 export const staleTime = 1000 * 60 * 5;
-export const sheetGid = '0';
+export const sheetGid = '484377564';
