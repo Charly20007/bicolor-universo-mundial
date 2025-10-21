@@ -28,7 +28,7 @@ const FooterCredits = ({
         {logoUrl ? (
           <img src={logoUrl} alt={logoAlt} />
         ) : (
-          <span className="fc__logoMark">C</span>  // placeholder
+          <span className="fc__logoMark">C</span>
         )}
       </div>
 

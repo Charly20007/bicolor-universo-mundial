@@ -20,7 +20,6 @@ const UniverseHeader = ({
         className="uheader__hero"
         style={{ backgroundImage: `url(${bgUrl})` }}
       >
-        <img className="uheader__logo" src={logoUrl} alt="Universo Bicolor" />
       </div>
 
       {/* Texto descriptivo */}

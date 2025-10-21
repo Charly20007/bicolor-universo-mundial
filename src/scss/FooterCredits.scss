@@ -1,3 +1,4 @@
+@use "./fonts";
 $max: 980px;
 $grey: #6c6c6c;
 $yellow: #ffcc00;      // amarillo EC
@@ -50,13 +51,14 @@ $shadow: rgba(0,0,0,.18);
     padding: 0;
     color: $grey;
     font-size: 18px;
-    line-height: 1.5;
+    line-height: 1.2;
+    font-family: var(--ff-cond);
   }
 
   &__item { margin: 4px 0; }
 
   &__label { color: $grey; }
-  &__name  { color: #2e2e2e; font-weight: 800; }
+  &__name  { color: #545455; font-weight: 800; }
 
   @media (max-width: 480px) {
     margin: 36px auto 28px;
