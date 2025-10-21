@@ -117,28 +117,32 @@ export default function PlayerTable({
 
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("matches")}>
-              <span>Partidos</span>
+              <span className="pt__label--full">Partidos</span>
+              <span className="pt__label--short">Part.</span>
               <SortIcon active={sortKey === "matches"} asc={sortAsc} />
             </button>
           </div>
 
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("minutes")}>
-              <span>Minutos</span>
+              <span className="pt__label--full">Minutos</span>
+              <span className="pt__label--short">Min.</span>
               <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
             </button>
           </div>
 
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("goals")}>
-              <span>Goles</span>
+              <span className="pt__label--full">Goles</span>
+              <span className="pt__label--short">Gol.</span>
               <SortIcon active={sortKey === "goals"} asc={sortAsc} />
             </button>
           </div>
 
           <div className="pt__cell" role="columnheader">
             <button type="button" className="pt__sort" onClick={() => handleSort("assists")}>
-              <span>Asistencias</span>
+              <span className="pt__label--full">Asistencias</span>
+              <span className="pt__label--short">Asis.</span>
               <SortIcon active={sortKey === "assists"} asc={sortAsc} />
             </button>
           </div>

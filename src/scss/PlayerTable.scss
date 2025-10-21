@@ -13,23 +13,23 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   display:grid;
   /* Jug | Pos | P | Min | G | A | 🟨 | 🟥 */
   grid-template-columns:
-    90px  /* Jugador */
-    70px   /* Posición */
-    70px   /* Partidos */
-    70px   /* Minutos */
-    55px   /* Goles */
-    85px   /* Asistencias */
-    50px   /* Amarillas */
-    50px;  /* Rojas */
+    100px  /* Jugador */
+    100px   /* Posición */
+    100px   /* Partidos */
+    100px   /* Minutos */
+    100px   /* Goles */
+    100px   /* Asistencias */
+    100px   /* Amarillas */
+    100px;  /* Rojas */
   align-items:center;
-  grid-auto-rows:minmax(30px,auto); /* más bajo */
-  column-gap:0;                     /* <- sin espacio entre columnas */
+  grid-auto-rows:minmax(30px,auto);
+  column-gap:0;
 }
 
 .pt__row--head{
   background:$head-bg; color:$head-text;
   position:sticky; top:0; z-index:2;
-  border-top-left-radius:0; border-top-right-radius:0; /* recto */
+  border-top-left-radius:0; border-top-right-radius:0;
 }
 
 /* ====== Celdas (sin aire) ====== */
@@ -86,8 +86,27 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
 .pt__row:not(.pt__row--head):nth-child(even){ background:#fcfcfc; }
 .pt__row:not(.pt__row--head):hover{ background:#f7f7f7; }
 
-/* ====== Mobile (mantener todo, con scroll si hace falta) ====== */
-@media (max-width:860px){
-  .pt__cell{ padding:4px 2px; font-size:11.8px; }
-  .pt__row{ grid-auto-rows:minmax(28px,auto); }
+/* Por defecto, se muestra la versión completa y se oculta la corta */
+.pt__label--short { display: none; }
+.pt__label--full  { display: inline; }
+
+/* En mobile (<= 860px), invierte: muestra abreviado y oculta el completo */
+@media (max-width: 860px) {
+  .pt__label--full  { display: none; }
+  .pt__label--short { display: inline; }
+  .pt__row{
+  display:grid;
+  grid-template-columns:
+    90px
+    55px
+    50px 
+    50px
+    55px
+    50px
+    40px
+    40px;
+  align-items:center;
+  grid-auto-rows:minmax(30px,auto);
+  column-gap:0;
+}
 }
