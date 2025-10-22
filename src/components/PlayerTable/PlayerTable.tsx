@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PlayerRow } from "../../types/types";
 
 type SortKey = keyof Pick<
@@ -13,13 +13,27 @@ type Props = {
   emptyStateText?: string;
 };
 
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width:${breakpoint}px)`);
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 // normaliza string (quita acentos y pasa a minúsculas)
 function norm(s: string) {
-  return s
-    .normalize("NFD")
-    // @ts-ignore – clase Unicode para diacríticos
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase();
+  return (
+    s
+      .normalize("NFD")
+      // @ts-ignore – clase Unicode para diacríticos
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase()
+  );
 }
 
 /** Resalta el texto que coincide con la búsqueda */
@@ -86,12 +100,14 @@ export default function PlayerTable({
   }, [rows, sortKey, sortAsc]);
 
   const handleSort = (key: SortKey) => {
-    if (key === sortKey) setSortAsc(v => !v);
+    if (key === sortKey) setSortAsc((v) => !v);
     else {
       setSortKey(key);
       setSortAsc(true);
     }
   };
+
+  const isMobile = useIsMobile();
 
   if (!sorted.length) return <p style={{ padding: 16 }}>{emptyStateText}</p>;
 
@@ -101,14 +117,26 @@ export default function PlayerTable({
         {/* HEADER */}
         <div className="pt__row pt__row--head" role="row">
           <div className="pt__cell pt__cell--player" role="columnheader">
-            <button type="button" className="pt__sort" onClick={() => handleSort("name")}>
+            <button
+              type="button"
+              className="pt__sort"
+              onClick={() => handleSort("name")}
+            >
               <span>Jugador</span>
               <SortIcon active={sortKey === "name"} asc={sortAsc} />
             </button>
           </div>
 
-          <div className="pt__cell pt__cell--pos" role="columnheader" aria-label="Posición">
-            <button type="button" className="pt__sort pt__sort--pos" onClick={() => handleSort("minutes")}>
+          <div
+            className="pt__cell pt__cell--pos"
+            role="columnheader"
+            aria-label="Posición"
+          >
+            <button
+              type="button"
+              className="pt__sort pt__sort--pos"
+              onClick={() => handleSort("minutes")}
+            >
               <span className="pt__label--full">Posición</span>
               <span className="pt__label--short">Pos.</span>
               <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
@@ -116,7 +144,11 @@ export default function PlayerTable({
           </div>
 
           <div className="pt__cell" role="columnheader">
-            <button type="button" className="pt__sort" onClick={() => handleSort("matches")}>
+            <button
+              type="button"
+              className="pt__sort"
+              onClick={() => handleSort("matches")}
+            >
               <span className="pt__label--full">Partidos</span>
               <span className="pt__label--short">Part.</span>
               <SortIcon active={sortKey === "matches"} asc={sortAsc} />
@@ -124,7 +156,11 @@ export default function PlayerTable({
           </div>
 
           <div className="pt__cell" role="columnheader">
-            <button type="button" className="pt__sort" onClick={() => handleSort("minutes")}>
+            <button
+              type="button"
+              className="pt__sort"
+              onClick={() => handleSort("minutes")}
+            >
               <span className="pt__label--full">Minutos</span>
               <span className="pt__label--short">Min.</span>
               <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
@@ -132,7 +168,11 @@ export default function PlayerTable({
           </div>
 
           <div className="pt__cell" role="columnheader">
-            <button type="button" className="pt__sort" onClick={() => handleSort("goals")}>
+            <button
+              type="button"
+              className="pt__sort"
+              onClick={() => handleSort("goals")}
+            >
               <span className="pt__label--full">Goles</span>
               <span className="pt__label--short">Gol.</span>
               <SortIcon active={sortKey === "goals"} asc={sortAsc} />
@@ -140,23 +180,45 @@ export default function PlayerTable({
           </div>
 
           <div className="pt__cell" role="columnheader">
-            <button type="button" className="pt__sort" onClick={() => handleSort("assists")}>
+            <button
+              type="button"
+              className="pt__sort"
+              onClick={() => handleSort("assists")}
+            >
               <span className="pt__label--full">Asistencias</span>
               <span className="pt__label--short">Asis.</span>
               <SortIcon active={sortKey === "assists"} asc={sortAsc} />
             </button>
           </div>
 
-          <div className="pt__cell pt__cell--card" role="columnheader" title="Amarillas">
+          <div
+            className="pt__cell pt__cell--card"
+            role="columnheader"
+            title="Amarillas"
+          >
             <span className="pt__card pt__card--y" aria-hidden />
-            <button type="button" className="pt__sort pt__sort--card" onClick={() => handleSort("yellow")} aria-label="Ordenar amarillas">
+            <button
+              type="button"
+              className="pt__sort pt__sort--card"
+              onClick={() => handleSort("yellow")}
+              aria-label="Ordenar amarillas"
+            >
               <SortIcon small active={sortKey === "yellow"} asc={sortAsc} />
             </button>
           </div>
 
-          <div className="pt__cell pt__cell--card" role="columnheader" title="Rojas">
+          <div
+            className="pt__cell pt__cell--card"
+            role="columnheader"
+            title="Rojas"
+          >
             <span className="pt__card pt__card--r" aria-hidden />
-            <button type="button" className="pt__sort pt__sort--card" onClick={() => handleSort("red")} aria-label="Ordenar rojas">
+            <button
+              type="button"
+              className="pt__sort pt__sort--card"
+              onClick={() => handleSort("red")}
+              aria-label="Ordenar rojas"
+            >
               <SortIcon small active={sortKey === "red"} asc={sortAsc} />
             </button>
           </div>
@@ -178,31 +240,66 @@ export default function PlayerTable({
               <div className="pt__cell pt__cell--player" role="cell">
                 <div className="pt__avatarWrap">
                   {r.avatarUrl ? (
-                    <img className="pt__avatar" src={r.avatarUrl} alt={r.name} />
+                    <img
+                      className="pt__avatar"
+                      src={r.avatarUrl}
+                      alt={r.name}
+                    />
                   ) : (
-                    <span className="pt__avatar pt__avatar--placeholder" aria-hidden />
+                    <span
+                      className="pt__avatar pt__avatar--placeholder"
+                      aria-hidden
+                    />
                   )}
                 </div>
-                <div className="pt__name">
-                  <span className="pt__nameTop">{firstHighlighted}</span>
-                  <span className="pt__nameBottom">{restHighlighted}</span>
+                <div
+                  className={`pt__name ${
+                    isMobile ? "is-mobile" : "is-desktop"
+                  }`}
+                >
+                  {isMobile ? (
+                    <>
+                      <span className="pt__nameTop">{firstHighlighted}</span>
+                      <span className="pt__nameBottom">{restHighlighted}</span>
+                    </>
+                  ) : (
+                    <>
+                      {firstHighlighted} {restHighlighted}
+                    </>
+                  )}
                 </div>
               </div>
 
               <div className="pt__cell pt__cell--pos" role="cell">
                 {r.pitchImgUrl ? (
-                  <img className="pt__pitch" src={r.pitchImgUrl} alt={`Posición de ${r.name}`} />
+                  <img
+                    className="pt__pitch"
+                    src={r.pitchImgUrl}
+                    alt={`Posición de ${r.name}`}
+                  />
                 ) : (
                   <span className="pt__pitch pt__pitch--placeholder" />
                 )}
               </div>
 
-              <div className="pt__cell" role="cell">{r.matches}</div>
-              <div className="pt__cell" role="cell">{r.minutes}</div>
-              <div className="pt__cell" role="cell">{r.goals}</div>
-              <div className="pt__cell" role="cell">{r.assists}</div>
-              <div className="pt__cell pt__cell--cardVal" role="cell">{r.yellow}</div>
-              <div className="pt__cell pt__cell--cardVal" role="cell">{r.red}</div>
+              <div className="pt__cell" role="cell">
+                {r.matches}
+              </div>
+              <div className="pt__cell" role="cell">
+                {r.minutes}
+              </div>
+              <div className="pt__cell" role="cell">
+                {r.goals}
+              </div>
+              <div className="pt__cell" role="cell">
+                {r.assists}
+              </div>
+              <div className="pt__cell pt__cell--cardVal" role="cell">
+                {r.yellow}
+              </div>
+              <div className="pt__cell pt__cell--cardVal" role="cell">
+                {r.red}
+              </div>
             </div>
           );
         })}
