@@ -2,14 +2,12 @@ import React from 'react';
 
 type Props = {
   bgUrl: string;
-  logoUrl: string;
   onClickGeneral?: () => void;
   onClickMatches?: () => void;
 };
 
 const UniverseHeader = ({
   bgUrl,
-  logoUrl,
   onClickGeneral,
   onClickMatches,
 }: Props) => {

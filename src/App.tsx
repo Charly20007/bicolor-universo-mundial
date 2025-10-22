@@ -22,7 +22,6 @@ const App = () => {
       <Header />
       <UniverseHeader
         bgUrl="https://elcomercio.pe/resizer/v2/6YPDFIHE3VDDRHWLZY7QZXBSTA.png?auth=49375be2f3ffd8da51a1fb192ee7b23b3dc6be223c45f95e0fea477f8d14b25e"
-        logoUrl="https://elcomercio.pe/resizer/v2/6YPDFIHE3VDDRHWLZY7QZXBSTA.png?auth=49375be2f3ffd8da51a1fb192ee7b23b3dc6be223c45f95e0fea477f8d14b25e"
         onClickGeneral={() => setView("general")}
         onClickMatches={() => setView("matches")}
       />

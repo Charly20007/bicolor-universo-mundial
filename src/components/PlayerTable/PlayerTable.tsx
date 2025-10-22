@@ -110,7 +110,6 @@ export default function PlayerTable({
           <div className="pt__cell pt__cell--pos" role="columnheader" aria-label="Posición">
             <button type="button" className="pt__sort pt__sort--pos" onClick={() => handleSort("minutes")}>
               <span>Posición</span>
-              {/* usamos minutes solo para que tenga icono; si tienes un campo real de posición, cámbialo */}
               <SortIcon active={sortKey === "minutes"} asc={sortAsc} />
             </button>
           </div>
@@ -211,7 +210,6 @@ export default function PlayerTable({
   );
 }
 
-/* ——— Ícono de ordenar ——— */
 function SortIcon({
   active,
   asc,

@@ -1,10 +1,9 @@
-/* ====== Vars ====== */
+@use "./fonts";
 $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
 
-/* ====== Contenedor ====== */
 .pt{
   margin:10px auto 14px; color:$text;
-  width:fit-content; max-width:100%; overflow-x:auto;
+  width:fit-content; max-width:100%;
 }
 .pt__table{ width:max-content; border-collapse:collapse; }
 
@@ -24,6 +23,7 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   align-items:center;
   grid-auto-rows:minmax(30px,auto);
   column-gap:0;
+  font-size: var(--ff-regular);
 }
 
 .pt__row--head{
@@ -32,15 +32,14 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   border-top-left-radius:0; border-top-right-radius:0;
 }
 
-/* ====== Celdas (sin aire) ====== */
 .pt__cell{
-  padding:4px 3px;                  /* mínimo */
+  padding:4px 3px;                 
   border-bottom:1px solid $line;
-  font-size:12px; line-height:1.08; /* compacto */
+  font-size:12px; line-height:1.08;
   white-space:nowrap; text-align:center;
   font-variant-numeric:tabular-nums;
 }
-.pt__row--head .pt__cell{ font-weight:600; padding:6px 5px; }
+.pt__row--head .pt__cell{ font-weight:400; padding:6px 5px; }
 
 /* ====== Botón header (flecha pegada) ====== */
 .pt__sort{
@@ -73,7 +72,7 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
 
 /* ====== Posición (mini-campo) ====== */
 .pt__cell--pos{ display:flex; justify-content: center; }
-.pt__pitch{ width:50px; height:40px; object-fit:contain; }
+.pt__pitch{ width:37px; height:26px; object-fit:contain; }
 .pt__pitch--placeholder{ width:30px; height:16px; border:1px solid $line; border-radius:6px; background:#f3f3f3; }
 
 /* ====== Tarjetas ====== */
@@ -97,7 +96,7 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   .pt__row{
   display:grid;
   grid-template-columns:
-    90px
+    80px
     55px
     50px 
     50px
@@ -110,3 +109,52 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   column-gap:0;
 }
 }
+
+/* ==== FIX: línea inferior continua por fila ==== */
+
+/* (1) Asegura variables (ajusta si ya las tienes) */
+$line: #e7e7e7 !default;
+
+/* (2) Quita el borde por celda que genera cortes */
+.pt__cell {
+  border-bottom: 0 !important;
+}
+
+/* (3) Dibuja UNA sola línea por fila con ::after */
+.pt__row {
+  position: relative;
+}
+.pt__row::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: $line;
+  pointer-events: none;
+  transform: translateZ(0); /* evita gaps por sub-píxel en algunos navegadores */
+}
+
+/* (4) Línea del header sobre fondo oscuro (un poco más visible) */
+.pt__row--head::after {
+  background: rgba(255, 255, 255, .28);
+  height: 1.5px;
+}
+
+/* (5) (Opcional) primera línea superior bajo el header */
+.pt__row.pt__row--head {
+  box-shadow: inset 0 -0px transparent; /* placeholder por si usabas box-shadow antes */
+   font-family: var(--ff-xc);
+}
+/* (Opcional) una línea superior para la primera fila de datos */
+.pt__row.pt__row--head + .pt__row::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -1px;
+  height: 1px;
+  background: $line;
+  pointer-events: none;
+}
+
+/* (6) Mantén zebra y hover (si los usas) — no tocan las líneas */
+.pt__row:not(.pt__row--head):nth-child(even) { background: #fcfcfc; }
+.pt__row:not(.pt__row--head):hover { background: #f7f7f7; }
