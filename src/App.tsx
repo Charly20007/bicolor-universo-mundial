@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import "./scss/header.scss";
 import "./scss/universe-header.scss";
 import "./scss/FooterCredits.scss";

@@ -20,10 +20,7 @@ $shadow: rgba(0,0,0,.18);
   /* --- Logo circular con espacio reservado --- */
   &__logo {
     width: 88px; height: 88px;
-    margin: 0 auto 16px;
-    border-radius: 50%;
-    background: $yellow;
-    box-shadow: 0 4px 10px -6px $shadow;
+    margin: 0 auto 5px;
     display: grid; place-items: center;
     overflow: hidden;
 
