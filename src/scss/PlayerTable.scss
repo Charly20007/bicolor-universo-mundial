@@ -23,7 +23,7 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   align-items:center;
   grid-auto-rows:minmax(30px,auto);
   column-gap:0;
-  font-size: var(--ff-regular);
+  font-size: var(--ff-xc);
 }
 
 .pt__row--head{
@@ -38,6 +38,7 @@ $text:#222; $line:#e7e7e7; $head-bg:#0b0b0b; $head-text:#fff;
   font-size:12px; line-height:1.08;
   white-space:nowrap; text-align:center;
   font-variant-numeric:tabular-nums;
+  font-size: var(--ff-regular);
 }
 .pt__row--head .pt__cell{ font-weight:400; padding:6px 5px; }
 
