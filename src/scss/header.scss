@@ -42,6 +42,7 @@ $gap: 8px;
 }
 
 @media (max-width: 480px) {
+  .app-header { display: none;}
   .app-header__topbar { padding: 5px 0; }
   .app-header__topbar .social a { width: 26px; height: 26px; }
 }

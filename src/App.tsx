@@ -24,6 +24,7 @@ const App = () => {
         bgUrl="https://elcomercio.pe/resizer/v2/6YPDFIHE3VDDRHWLZY7QZXBSTA.png?auth=49375be2f3ffd8da51a1fb192ee7b23b3dc6be223c45f95e0fea477f8d14b25e"
         onClickGeneral={() => setView("general")}
         onClickMatches={() => setView("matches")}
+        mobileBgUrl="https://elcomercio.pe/resizer/v2/7QNEOIXVEFF6NJIFLLU35LYS5U.png?auth=528b607386375ca4d2d773d4b8e352498fe31358327b2eefa4eafe32fd9b08f4"
       />
 
       {view === "general" ? <PlayersPage /> 

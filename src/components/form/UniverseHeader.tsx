@@ -1,24 +1,29 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
+  /** Imagen de fondo para desktop */
   bgUrl: string;
+  /** Imagen de fondo para mobile (fallback: usa bgUrl si no se pasa) */
+  mobileBgUrl?: string;
   onClickGeneral?: () => void;
   onClickMatches?: () => void;
 };
 
 const UniverseHeader = ({
   bgUrl,
+  mobileBgUrl,
   onClickGeneral,
   onClickMatches,
 }: Props) => {
+  const heroStyle = {
+    "--bg-desktop": `url(${bgUrl})`,
+    "--bg-mobile": `url(${mobileBgUrl || bgUrl})`,
+  } as React.CSSProperties;
+
   return (
     <header className="uheader">
       {/* Banner de fondo */}
-      <div
-        className="uheader__hero"
-        style={{ backgroundImage: `url(${bgUrl})` }}
-      >
-      </div>
+      <div className="uheader__hero" style={heroStyle} />
 
       {/* Texto descriptivo */}
       <p className="uheader__lead">
@@ -45,6 +50,6 @@ const UniverseHeader = ({
       </div>
     </header>
   );
-}
+};
 
-export default UniverseHeader
+export default UniverseHeader;
