@@ -1,0 +1,7 @@
+$SCOPE: ":where(#root)" !default;
+
+@mixin scope {
+  #{$SCOPE} {
+    @content;
+  }
+}

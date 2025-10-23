@@ -2,6 +2,7 @@
   "name": "bicolor-universo-mundial",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/mundial-de-clubes-2029-clasificacion-tabla-de-posiciones-como-van-equipos-conmebol",
   "dependencies": {
     "@tanstack/react-query": "^5.90.3",
     "@testing-library/dom": "^10.4.1",

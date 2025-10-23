@@ -1,0 +1,15 @@
+@font-face{
+  font-family:"EPBentonSans";
+  src:url("EP_BentonSans-Regular_O.otf") format("opentype");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"EPBentonSansCond";
+  src:url("EP_BentonSansCond-Book_O.otf") format("opentype");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"EPBentonSansExtraComp";
+  src:url("EP_BentonSansExtraComp-Medium_O.otf") format("opentype");
+  font-weight:500; font-style:normal; font-display:swap;
+}
